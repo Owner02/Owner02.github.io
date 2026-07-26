@@ -170,7 +170,9 @@
 
 <script type="module">
     // ---------- НАСТРОЙКИ ----------
-    const GITHUB_TOKEN = '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';
+    // Токен теперь хранится в GitHub Secrets и передаётся через Actions
+    // В коде его больше нет!
+    const GITHUB_TOKEN = ''; // Токен не нужен в коде, он используется в Actions через секрет WEEKENDTOKEN
     const REPO_OWNER = 'owner02';
     const REPO_NAME = 'WeekEnd';
     const ISSUE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
@@ -233,7 +235,6 @@
             const response = await fetch(ISSUE_URL, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },
