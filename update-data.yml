@@ -1,0 +1,33 @@
+name: Update Places Data
+
+on:
+  push:
+    paths:
+      - 'data/places.json'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Validate JSON
+        run: |
+          if [ -f data/places.json ]; then
+            echo "✅ Файл с данными существует"
+            cat data/places.json | jq . > /dev/null || exit 1
+            echo "✅ JSON валиден"
+          else
+            echo "❌ Файл не найден"
+            exit 1
+          fi
+      
+      - name: Commit if changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/places.json
+          git diff --staged --quiet || git commit -m "Автоматическое обновление данных"
+          git push
