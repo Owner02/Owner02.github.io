@@ -17,7 +17,6 @@ jobs:
         run: |
           BODY="${{ github.event.issue.body }}"
           echo "$BODY" > /tmp/body.txt
-          # Извлекаем JSON между маркерами
           sed -n '/```json/,/```/p' /tmp/body.txt | sed '1d;$d' > /tmp/data.json
           echo "JSON extracted"
 
