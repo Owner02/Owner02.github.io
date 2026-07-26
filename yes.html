@@ -77,8 +77,6 @@
         .ctrl-btn.delete { background: #ffe0d0; color: #c25d3a; }
         .ctrl-btn.delete:active { background: #ffc8b0; }
         .ctrl-btn:active { transform: scale(0.94); }
-        .ctrl-btn.edit { background: #f0e6d0; color: #8a7a5a; font-size: 1.2rem; }
-        .ctrl-btn.save { background: #b8d9b0; color: #2a6e3a; font-size: 1.2rem; }
         .action-btn {
             background: #5887a3;
             color: white;
@@ -170,9 +168,8 @@
 
 <script type="module">
     // ---------- НАСТРОЙКИ ----------
-    // Токен теперь хранится в GitHub Secrets и передаётся через Actions
-    // В коде его больше нет!
-    const GITHUB_TOKEN = ''; // Токен не нужен в коде, он используется в Actions через секрет WEEKENDTOKEN
+    // Токен для создания Issue (для работы из браузера)
+    const GITHUB_TOKEN = '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';
     const REPO_OWNER = 'owner02';
     const REPO_NAME = 'WeekEnd';
     const ISSUE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
@@ -235,6 +232,7 @@
             const response = await fetch(ISSUE_URL, {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },
