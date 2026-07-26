@@ -5,21 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Наш морской гид</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(145deg, #c3e2f7 0%, #9ac2db 100%);
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             padding: 20px 16px 60px;
             color: #16445f;
         }
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1300px; margin: 0 auto; }
         h1 {
             text-align: center;
             font-size: 2.2rem;
@@ -57,11 +50,7 @@
             align-items: center;
             gap: 12px;
         }
-        .cards-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
+        .cards-list { display: flex; flex-direction: column; gap: 14px; }
         .card-item {
             background: white;
             border-radius: 32px;
@@ -72,33 +61,13 @@
             justify-content: space-between;
             gap: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: 0.2s;
             border: 1px solid #ffe0bb;
         }
-        .card-content {
-            flex: 4;
-            min-width: 180px;
-        }
-        .card-content strong {
-            font-size: 1.2rem;
-            color: #2e5f7a;
-            display: block;
-        }
-        .card-content p {
-            font-size: 0.85rem;
-            color: #5f7f95;
-            margin: 4px 0;
-        }
-        .address {
-            font-size: 0.75rem;
-            color: #b27d51;
-            font-family: monospace;
-        }
-        .controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .card-content { flex: 4; min-width: 180px; }
+        .card-content strong { font-size: 1.2rem; color: #2e5f7a; display: block; }
+        .card-content p { font-size: 0.85rem; color: #5f7f95; margin: 4px 0; }
+        .address { font-size: 0.75rem; color: #b27d51; font-family: monospace; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; }
         .ctrl-btn {
             background: #eef3f9;
             border: none;
@@ -109,19 +78,12 @@
             cursor: pointer;
             font-weight: bold;
             color: #336b8f;
-            transition: 0.1s;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-        .ctrl-btn.delete {
-            background: #ffe0d0;
-            color: #c25d3a;
-        }
+        .ctrl-btn.delete { background: #ffe0d0; color: #c25d3a; }
         .ctrl-btn.delete:active { background: #ffc8b0; }
         .ctrl-btn:active { transform: scale(0.94); }
-        .ctrl-btn.up, .ctrl-btn.down {
-            font-size: 1.5rem;
-            line-height: 1;
-        }
+        .ctrl-btn.up, .ctrl-btn.down { font-size: 1.5rem; line-height: 1; }
         .reset-btn {
             background: #eac694;
             color: #2c4b62;
@@ -143,16 +105,9 @@
             font-weight: bold;
             display: inline-block;
         }
-        .actions {
-            text-align: center;
-            margin-top: 30px;
-        }
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.75rem;
-            color: #fff3e0;
-        }
+        .actions { text-align: center; margin-top: 30px; }
+        footer { text-align: center; margin-top: 30px; font-size: 0.75rem; color: #fff3e0; }
+        .loading { text-align: center; padding: 40px; font-size: 1.2rem; color: #1e4a6e; }
         @media (max-width: 680px) {
             .card-item { flex-direction: column; align-items: stretch; }
             .controls { justify-content: flex-end; }
@@ -164,24 +119,26 @@
 <body>
 <div class="container">
     <h1>🧜‍♀️ Карта наших приключений 🐚</h1>
-    <div class="sub">переставляй, убирай, все что пожелаешь буду рад если соберешь идеальный день</div>
+    <div class="sub">переставляй, убирай, собери идеальный день ✨</div>
 
-    <div id="categoriesContainer"></div>
+    <div id="categoriesContainer">
+        <div class="loading">⏳ Загрузка...</div>
+    </div>
 
     <div class="actions">
         <button id="resetLocalBtn" class="reset-btn">🌊 Вернуть всё как было 🌊</button>
         <a href="index.html" class="back-btn">🔙 К началу</a>
     </div>
-    <footer>💙 твой выбор сохраняется, даже если закрыть страницу, но на устройстве ...</footer>
+    <footer>💙 твой выбор сохраняется в репозитории GitHub</footer>
 </div>
 
-<script>
-    // ---------- ИСХОДНЫЕ ДАННЫЕ (морские варианты) ----------
+<script type="module">
+    // ---------- ИСХОДНЫЕ ДАННЫЕ ----------
     const categoriesData = {
         "🌊 У воды": [
-            { name: "Утиный мост", desc: "Романтичный и ностальгический вид на реку, красиво в любое время", addr: "" },
-            { name: "Порто Мальтезе", desc: "Средиземноморская кухня, специализирующаяся на блюдах из рыбы и морепродуктов. Шикарная панорама на воду", addr: "Невский 174" },
-            { name: "Ресторан «Ассамблея»", desc: "Есть несколько ресторанов с панорамными видами, авторской кухней и уютной атмосферой.", addr: "" },
+            { name: "Утиный мост", desc: "Романтичный и ностальгический вид на реку", addr: "" },
+            { name: "Порто Мальтезе", desc: "Средиземноморская кухня, панорама на воду", addr: "Невский 174" },
+            { name: "Ресторан «Ассамблея»", desc: "Панорамные виды, авторская кухня", addr: "" },
             { name: "Кофейный ларёчек", desc: "Просто взять кофе", addr: "" }
         ],
         "🌿 Парки для прогулок": [
@@ -192,7 +149,7 @@
         "🍿 Кино и развлечения": [
             { name: "КАРО 11 Охта", desc: "ТРЦ Охта Молл, рядом фуд-корт", addr: "" },
             { name: "Кинотеатр «Заневский»", desc: "Новинки и старые плёнки", addr: "" },
-            { name: "Смайл Парк", desc: "Аттракционы, музеи, веселье в общем", addr: "" }
+            { name: "Смайл Парк", desc: "Аттракционы, музеи, веселье", addr: "" }
         ],
         "🍽️ Кафешки": [
             { name: "Cherdak Khudozhnika", desc: "Кафе-галерея, вид на крыши, фондю", addr: "" },
@@ -206,40 +163,92 @@
         ]
     };
 
-    // Загружаем данные из localStorage или используем исходные
-    function loadData() {
-        const saved = localStorage.getItem('seaVibesPlaces');
-        if (saved) {
-            try {
-                return JSON.parse(saved);
-            } catch(e) { console.warn(e); }
+    // ---------- НАСТРОЙКИ ----------
+    const GITHUB_TOKEN = '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';
+    const REPO_OWNER = 'owner02';
+    const REPO_NAME = 'WeekEnd';
+    const REPO_PATH = 'data/places.json';
+    const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${REPO_PATH}`;
+
+    // ---------- РАБОТА С GITHUB ----------
+    async function loadFromGitHub() {
+        try {
+            const rawUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${REPO_PATH}`;
+            const response = await fetch(rawUrl);
+            if (!response.ok) throw new Error('Не удалось загрузить данные');
+            return await response.json();
+        } catch (error) {
+            console.warn('Загружаем локальные данные:', error);
+            return JSON.parse(JSON.stringify(categoriesData));
         }
-        // клонируем исходные данные глубоко
-        return JSON.parse(JSON.stringify(categoriesData));
     }
 
-    let currentData = loadData();
+    async function saveToGitHub(data) {
+        try {
+            const getResponse = await fetch(API_URL, {
+                headers: {
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            let sha = null;
+            if (getResponse.ok) {
+                const fileInfo = await getResponse.json();
+                sha = fileInfo.sha;
+            }
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+            const response = await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: '🔄 Обновление выбора мест',
+                    content: content,
+                    sha: sha
+                })
+            });
+            if (response.ok) {
+                console.log('✅ Данные сохранены в репозитории!');
+                return true;
+            } else {
+                console.error('❌ Ошибка сохранения:', await response.json());
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Ошибка:', error);
+            return false;
+        }
+    }
 
-    // Сохранить в localStorage
+    // ---------- ЛОГИКА РАБОТЫ С ДАННЫМИ ----------
+    let currentData = await loadFromGitHub();
+
     function persistData() {
         localStorage.setItem('seaVibesPlaces', JSON.stringify(currentData));
+        saveToGitHub(currentData).then(success => {
+            if (success) {
+                console.log('✅ Сохранено в репозитории');
+            } else {
+                console.warn('⚠️ Данные сохранены только локально');
+            }
+        });
     }
 
-    // Перемещение элемента внутри массива
     function moveItem(arr, from, to) {
         if (to < 0 || to >= arr.length) return;
         const item = arr.splice(from, 1)[0];
         arr.splice(to, 0, item);
     }
 
-    // Удаление элемента
     function deleteItem(categoryKey, idx) {
         currentData[categoryKey].splice(idx, 1);
         persistData();
         renderCategories();
     }
 
-    // Перемещение вверх/вниз
     function moveUp(categoryKey, idx) {
         if (idx <= 0) return;
         const arr = currentData[categoryKey];
@@ -256,25 +265,32 @@
         renderCategories();
     }
 
-    // Сброс к исходным данным
     function resetToOriginal() {
         currentData = JSON.parse(JSON.stringify(categoriesData));
         persistData();
         renderCategories();
     }
 
-    // Отрисовка всех категорий
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // ---------- ОТРИСОВКА ----------
     function renderCategories() {
         const container = document.getElementById('categoriesContainer');
         if (!container) return;
         container.innerHTML = '';
         for (const [catTitle, items] of Object.entries(currentData)) {
             if (items.length === 0) {
-                // можно показать пустую категорию, но скроем для аккуратности
-                // но лучше оставить с сообщением "ничего не выбрано"
                 const catDiv = document.createElement('div');
                 catDiv.className = 'category';
-                catDiv.innerHTML = `<h2>${catTitle}</h2><div style="padding:20px; text-align:center; color:#7f9eb5;">✨ тут пока пусто, но можно вернуть всё сбросом ✨</div>`;
+                catDiv.innerHTML = `<h2>${catTitle}</h2><div style="padding:20px; text-align:center; color:#7f9eb5;">✨ тут пока пусто ✨</div>`;
                 container.appendChild(catDiv);
                 continue;
             }
@@ -305,21 +321,7 @@
             catDiv.appendChild(listDiv);
             container.appendChild(catDiv);
         }
-        // Привязать события после отрисовки
         attachEvents();
-    }
-
-    // Защита от XSS
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
-        });
     }
 
     function attachEvents() {
@@ -345,6 +347,7 @@
             moveUp(catTitle, idx);
         }
     }
+
     function downHandler(e) {
         const btn = e.currentTarget;
         const catTitle = btn.getAttribute('data-cat');
@@ -353,6 +356,7 @@
             moveDown(catTitle, idx);
         }
     }
+
     function delHandler(e) {
         const btn = e.currentTarget;
         const catTitle = btn.getAttribute('data-cat');
@@ -362,10 +366,7 @@
         }
     }
 
-    // Сброс
-    document.getElementById('resetLocalBtn')?.addEventListener('click', () => resetToOriginal());
-
-    // начальный рендер
+    document.getElementById('resetLocalBtn')?.addEventListener('click', resetToOriginal);
     renderCategories();
 </script>
 </body>
