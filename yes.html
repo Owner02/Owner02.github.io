@@ -24,13 +24,9 @@
             justify-content: center;
             gap: 12px;
         }
-        .sub {
-            text-align: center;
-            font-size: 1rem;
-            margin-bottom: 30px;
-            color: #fbf5e3;
-            font-style: italic;
-        }
+        .sub { text-align: center; font-size: 1rem; margin-bottom: 30px; color: #fbf5e3; font-style: italic; }
+        
+        /* Карточки категорий */
         .category {
             background: rgba(255, 252, 240, 0.9);
             backdrop-filter: blur(2px);
@@ -67,7 +63,9 @@
         .card-content strong { font-size: 1.2rem; color: #2e5f7a; display: block; }
         .card-content p { font-size: 0.85rem; color: #5f7f95; margin: 4px 0; }
         .address { font-size: 0.75rem; color: #b27d51; font-family: monospace; }
-        .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        /* Кнопки управления */
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .ctrl-btn {
             background: #eef3f9;
             border: none;
@@ -83,54 +81,107 @@
         .ctrl-btn.delete { background: #ffe0d0; color: #c25d3a; }
         .ctrl-btn.delete:active { background: #ffc8b0; }
         .ctrl-btn:active { transform: scale(0.94); }
-        .ctrl-btn.up, .ctrl-btn.down { font-size: 1.5rem; line-height: 1; }
-        .reset-btn {
-            background: #eac694;
-            color: #2c4b62;
+        .ctrl-btn.edit { background: #f0e6d0; color: #8a7a5a; font-size: 1.2rem; }
+        .ctrl-btn.save { background: #b8d9b0; color: #2a6e3a; font-size: 1.2rem; }
+        
+        /* Большие кнопки действий */
+        .action-btn {
+            background: #5887a3;
+            color: white;
             padding: 12px 28px;
             border-radius: 50px;
             border: none;
             font-size: 1rem;
             font-weight: bold;
-            margin-top: 20px;
-            margin-right: 15px;
             cursor: pointer;
         }
-        .back-btn {
-            background: #5887a3;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-        }
-        .actions { text-align: center; margin-top: 30px; }
+        .action-btn:hover { background: #4a7894; }
+        .action-btn.green { background: #5e9b6e; }
+        .action-btn.green:hover { background: #4d885d; }
+        .action-btn.orange { background: #eac694; color: #2c4b62; }
+        .action-btn.orange:hover { background: #dcb57e; }
+        
+        .actions { text-align: center; margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
         footer { text-align: center; margin-top: 30px; font-size: 0.75rem; color: #fff3e0; }
         .loading { text-align: center; padding: 40px; font-size: 1.2rem; color: #1e4a6e; }
+        .edit-mode-on .card-item { border-color: #ffb882; border-width: 2px; }
+        
+        /* Всплывающее сообщение о сохранении */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e4a6e;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; }
+        .toast.success { background: #2a7a3a; }
+        .toast.error { background: #a94a4a; }
+        
+        /* Формы редактирования */
+        .edit-input {
+            border: 2px solid #ffb882;
+            border-radius: 12px;
+            padding: 4px 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            width: 100%;
+            max-width: 300px;
+            background: #fffdf7;
+        }
+        .edit-input:focus { outline: none; border-color: #e8944a; }
+        .edit-textarea {
+            border: 2px solid #ffb882;
+            border-radius: 12px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            width: 100%;
+            max-width: 400px;
+            background: #fffdf7;
+            resize: vertical;
+        }
+        .edit-textarea:focus { outline: none; border-color: #e8944a; }
+        
         @media (max-width: 680px) {
             .card-item { flex-direction: column; align-items: stretch; }
             .controls { justify-content: flex-end; }
             .card-content { text-align: left; }
             .ctrl-btn { width: 48px; height: 48px; }
+            .edit-input, .edit-textarea { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🧜‍♀️ Карта наших приключений 🐚</h1>
-    <div class="sub">переставляй, убирай, собери идеальный день ✨</div>
+    <div class="sub">переставляй, убирай, редактируй — собери идеальный день ✨</div>
 
     <div id="categoriesContainer">
         <div class="loading">⏳ Загрузка...</div>
     </div>
 
     <div class="actions">
-        <button id="resetLocalBtn" class="reset-btn">🌊 Вернуть всё как было 🌊</button>
-        <a href="index.html" class="back-btn">🔙 К началу</a>
+        <button id="toggleEditBtn" class="action-btn orange">✏️ Режим редактирования</button>
+        <button id="saveToGitBtn" class="action-btn green">💾 Сохранить в GitHub</button>
+        <button id="resetLocalBtn" class="action-btn orange">🌊 Вернуть всё как было</button>
+        <button id="addCategoryBtn" class="action-btn">➕ Добавить категорию</button>
+        <a href="index.html" class="action-btn" style="text-decoration:none;background:#5887a3;">🔙 К началу</a>
     </div>
-    <footer>💙 твой выбор сохраняется в репозитории GitHub</footer>
+    <footer>💙 изменения сохраняются в репозитории GitHub</footer>
 </div>
+
+<!-- Всплывающее сообщение -->
+<div id="toast" class="toast"></div>
 
 <script type="module">
     // ---------- ИСХОДНЫЕ ДАННЫЕ ----------
@@ -163,18 +214,23 @@
         ]
     };
 
-    // ---------- НАСТРОЙКИ ----------
+    // ---------- НАСТРОЙКИ GITHUB ----------
     const GITHUB_TOKEN = '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';
     const REPO_OWNER = 'owner02';
     const REPO_NAME = 'WeekEnd';
     const REPO_PATH = 'data/places.json';
     const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${REPO_PATH}`;
 
+    // ---------- СОСТОЯНИЕ ----------
+    let currentData = {};
+    let editMode = false;
+    let isSaving = false;
+
     // ---------- РАБОТА С GITHUB ----------
     async function loadFromGitHub() {
         try {
             const rawUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${REPO_PATH}`;
-            const response = await fetch(rawUrl);
+            const response = await fetch(rawUrl + '?t=' + Date.now()); // Обход кеша
             if (!response.ok) throw new Error('Не удалось загрузить данные');
             return await response.json();
         } catch (error) {
@@ -184,6 +240,8 @@
     }
 
     async function saveToGitHub(data) {
+        if (isSaving) return false;
+        isSaving = true;
         try {
             const getResponse = await fetch(API_URL, {
                 headers: {
@@ -205,36 +263,33 @@
                     'Accept': 'application/vnd.github.v3+json'
                 },
                 body: JSON.stringify({
-                    message: '🔄 Обновление выбора мест',
+                    message: `🔄 Обновление выбора мест (${new Date().toLocaleString('ru-RU')})`,
                     content: content,
                     sha: sha
                 })
             });
             if (response.ok) {
-                console.log('✅ Данные сохранены в репозитории!');
+                showToast('✅ Данные успешно сохранены в GitHub!', 'success');
                 return true;
             } else {
-                console.error('❌ Ошибка сохранения:', await response.json());
+                const errorData = await response.json();
+                console.error('❌ Ошибка сохранения:', errorData);
+                showToast('❌ Ошибка сохранения: ' + (errorData.message || 'Неизвестная ошибка'), 'error');
                 return false;
             }
         } catch (error) {
             console.error('❌ Ошибка:', error);
+            showToast('❌ Ошибка сети. Проверь интернет-соединение.', 'error');
             return false;
+        } finally {
+            isSaving = false;
         }
     }
 
-    // ---------- ЛОГИКА РАБОТЫ С ДАННЫМИ ----------
-    let currentData = await loadFromGitHub();
-
+    // ---------- РАБОТА С ДАННЫМИ ----------
     function persistData() {
         localStorage.setItem('seaVibesPlaces', JSON.stringify(currentData));
-        saveToGitHub(currentData).then(success => {
-            if (success) {
-                console.log('✅ Сохранено в репозитории');
-            } else {
-                console.warn('⚠️ Данные сохранены только локально');
-            }
-        });
+        renderCategories();
     }
 
     function moveItem(arr, from, to) {
@@ -243,10 +298,19 @@
         arr.splice(to, 0, item);
     }
 
-    function deleteItem(categoryKey, idx) {
-        currentData[categoryKey].splice(idx, 1);
+    function deleteCategory(categoryKey) {
+        if (!confirm(`Удалить категорию "${categoryKey}" и все места в ней?`)) return;
+        delete currentData[categoryKey];
         persistData();
-        renderCategories();
+    }
+
+    function deleteItem(categoryKey, idx) {
+        if (!confirm(`Удалить "${currentData[categoryKey][idx].name}"?`)) return;
+        currentData[categoryKey].splice(idx, 1);
+        if (currentData[categoryKey].length === 0) {
+            deleteCategory(categoryKey);
+        }
+        persistData();
     }
 
     function moveUp(categoryKey, idx) {
@@ -254,7 +318,6 @@
         const arr = currentData[categoryKey];
         moveItem(arr, idx, idx-1);
         persistData();
-        renderCategories();
     }
 
     function moveDown(categoryKey, idx) {
@@ -262,23 +325,48 @@
         if (idx >= arr.length-1) return;
         moveItem(arr, idx, idx+1);
         persistData();
-        renderCategories();
+    }
+
+    function addItem(categoryKey) {
+        const newItem = { name: "Новое место", desc: "Описание", addr: "" };
+        currentData[categoryKey].push(newItem);
+        persistData();
+    }
+
+    function addCategory() {
+        const name = prompt('Введите название новой категории (с эмодзи, например "🏖️ Пляжи"):');
+        if (!name || name.trim() === '') return;
+        if (currentData[name.trim()]) {
+            alert('Такая категория уже существует!');
+            return;
+        }
+        currentData[name.trim()] = [];
+        persistData();
     }
 
     function resetToOriginal() {
+        if (!confirm('Вернуть всё к исходному состоянию? Все изменения будут потеряны.')) return;
         currentData = JSON.parse(JSON.stringify(categoriesData));
         persistData();
+        showToast('🌊 Данные сброшены до исходных', 'success');
+    }
+
+    // ---------- РЕДАКТИРОВАНИЕ ----------
+    function updateItem(categoryKey, idx, field, value) {
+        currentData[categoryKey][idx][field] = value;
+        // Не сохраняем автоматически, только при нажатии "Сохранить в GitHub"
         renderCategories();
     }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, m => {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
+    function updateCategoryName(oldKey, newKey) {
+        if (!newKey || newKey.trim() === '' || oldKey === newKey.trim()) return;
+        if (currentData[newKey.trim()]) {
+            alert('Категория с таким именем уже существует!');
+            return;
+        }
+        currentData[newKey.trim()] = currentData[oldKey];
+        delete currentData[oldKey];
+        persistData();
     }
 
     // ---------- ОТРИСОВКА ----------
@@ -286,88 +374,173 @@
         const container = document.getElementById('categoriesContainer');
         if (!container) return;
         container.innerHTML = '';
-        for (const [catTitle, items] of Object.entries(currentData)) {
-            if (items.length === 0) {
-                const catDiv = document.createElement('div');
-                catDiv.className = 'category';
-                catDiv.innerHTML = `<h2>${catTitle}</h2><div style="padding:20px; text-align:center; color:#7f9eb5;">✨ тут пока пусто ✨</div>`;
-                container.appendChild(catDiv);
-                continue;
-            }
+        const sortedKeys = Object.keys(currentData).sort();
+        
+        for (const catTitle of sortedKeys) {
+            const items = currentData[catTitle] || [];
             const catDiv = document.createElement('div');
             catDiv.className = 'category';
+            if (editMode) catDiv.classList.add('edit-mode-on');
+            
+            // Заголовок категории с возможностью редактирования
             const h2 = document.createElement('h2');
-            h2.innerHTML = catTitle;
+            if (editMode) {
+                h2.innerHTML = `
+                    <input type="text" class="edit-input" value="${escapeHtml(catTitle)}" 
+                           style="max-width:400px;font-size:1.8rem;font-weight:bold;color:#22668d;border-left:8px solid #ffb882;padding-left:20px;background:transparent;"
+                           data-category="${escapeHtml(catTitle)}" 
+                           onchange="window.updateCategoryNameFromInput('${escapeHtml(catTitle)}', this.value)">
+                    <button class="ctrl-btn delete" onclick="window.deleteCategory('${escapeHtml(catTitle)}')" style="font-size:1.2rem;">🗑️</button>
+                `;
+            } else {
+                h2.innerHTML = catTitle;
+            }
             catDiv.appendChild(h2);
+            
+            // Список мест
             const listDiv = document.createElement('div');
             listDiv.className = 'cards-list';
+            
+            if (items.length === 0 && !editMode) {
+                listDiv.innerHTML = `<div style="padding:20px;text-align:center;color:#7f9eb5;">✨ здесь пока пусто ✨</div>`;
+            }
+            
             items.forEach((item, idx) => {
                 const card = document.createElement('div');
                 card.className = 'card-item';
-                card.innerHTML = `
-                    <div class="card-content">
-                        <strong>${escapeHtml(item.name)}</strong>
-                        <p>${escapeHtml(item.desc)}</p>
-                        ${item.addr ? `<div class="address">📍 ${escapeHtml(item.addr)}</div>` : ''}
-                    </div>
-                    <div class="controls">
-                        <button class="ctrl-btn up" data-cat="${catTitle}" data-idx="${idx}" data-dir="up">⬆️</button>
-                        <button class="ctrl-btn down" data-cat="${catTitle}" data-idx="${idx}" data-dir="down">⬇️</button>
-                        <button class="ctrl-btn delete" data-cat="${catTitle}" data-idx="${idx}" data-dir="del">🗑️</button>
-                    </div>
-                `;
+                if (editMode) card.classList.add('edit-mode-on');
+                
+                let contentHtml = '';
+                if (editMode) {
+                    contentHtml = `
+                        <div class="card-content">
+                            <input type="text" class="edit-input" value="${escapeHtml(item.name)}" 
+                                   style="font-weight:bold;font-size:1.2rem;color:#2e5f7a;"
+                                   onchange="window.updateItemField('${escapeHtml(catTitle)}', ${idx}, 'name', this.value)">
+                            <textarea class="edit-textarea" rows="2" 
+                                      onchange="window.updateItemField('${escapeHtml(catTitle)}', ${idx}, 'desc', this.value)">${escapeHtml(item.desc)}</textarea>
+                            <input type="text" class="edit-input" value="${escapeHtml(item.addr || '')}" 
+                                   placeholder="Адрес (необязательно)"
+                                   style="font-size:0.85rem;color:#b27d51;font-family:monospace;"
+                                   onchange="window.updateItemField('${escapeHtml(catTitle)}', ${idx}, 'addr', this.value)">
+                        </div>
+                        <div class="controls">
+                            <button class="ctrl-btn up" onclick="window.moveUp('${escapeHtml(catTitle)}', ${idx})">⬆️</button>
+                            <button class="ctrl-btn down" onclick="window.moveDown('${escapeHtml(catTitle)}', ${idx})">⬇️</button>
+                            <button class="ctrl-btn delete" onclick="window.deleteItem('${escapeHtml(catTitle)}', ${idx})">🗑️</button>
+                        </div>
+                    `;
+                } else {
+                    contentHtml = `
+                        <div class="card-content">
+                            <strong>${escapeHtml(item.name)}</strong>
+                            <p>${escapeHtml(item.desc)}</p>
+                            ${item.addr ? `<div class="address">📍 ${escapeHtml(item.addr)}</div>` : ''}
+                        </div>
+                        <div class="controls">
+                            <button class="ctrl-btn up" onclick="window.moveUp('${escapeHtml(catTitle)}', ${idx})">⬆️</button>
+                            <button class="ctrl-btn down" onclick="window.moveDown('${escapeHtml(catTitle)}', ${idx})">⬇️</button>
+                            <button class="ctrl-btn delete" onclick="window.deleteItem('${escapeHtml(catTitle)}', ${idx})">🗑️</button>
+                        </div>
+                    `;
+                }
+                card.innerHTML = contentHtml;
                 listDiv.appendChild(card);
             });
+            
+            // Кнопка добавления места в категорию (в режиме редактирования)
+            if (editMode) {
+                const addBtn = document.createElement('button');
+                addBtn.className = 'action-btn green';
+                addBtn.style.marginTop = '12px';
+                addBtn.style.fontSize = '0.9rem';
+                addBtn.textContent = '+ Добавить место';
+                addBtn.onclick = () => window.addItem('' + catTitle);
+                listDiv.appendChild(addBtn);
+            }
+            
             catDiv.appendChild(listDiv);
             container.appendChild(catDiv);
         }
-        attachEvents();
     }
 
-    function attachEvents() {
-        document.querySelectorAll('.ctrl-btn.up').forEach(btn => {
-            btn.removeEventListener('click', upHandler);
-            btn.addEventListener('click', upHandler);
-        });
-        document.querySelectorAll('.ctrl-btn.down').forEach(btn => {
-            btn.removeEventListener('click', downHandler);
-            btn.addEventListener('click', downHandler);
-        });
-        document.querySelectorAll('.ctrl-btn.delete').forEach(btn => {
-            btn.removeEventListener('click', delHandler);
-            btn.addEventListener('click', delHandler);
+    // ---------- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ----------
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            if (m === '"') return '&quot;';
+            return m;
         });
     }
 
-    function upHandler(e) {
-        const btn = e.currentTarget;
-        const catTitle = btn.getAttribute('data-cat');
-        const idx = parseInt(btn.getAttribute('data-idx'), 10);
-        if (!isNaN(idx) && currentData[catTitle]) {
-            moveUp(catTitle, idx);
-        }
+    function showToast(text, type = '') {
+        const toast = document.getElementById('toast');
+        toast.textContent = text;
+        toast.className = 'toast show ' + type;
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.className = 'toast';
+        }, 4000);
     }
 
-    function downHandler(e) {
-        const btn = e.currentTarget;
-        const catTitle = btn.getAttribute('data-cat');
-        const idx = parseInt(btn.getAttribute('data-idx'), 10);
-        if (!isNaN(idx) && currentData[catTitle]) {
-            moveDown(catTitle, idx);
+    // ---------- ГЛОБАЛЬНЫЕ ФУНКЦИИ ДЛЯ HTML ----------
+    window.moveUp = moveUp;
+    window.moveDown = moveDown;
+    window.deleteItem = deleteItem;
+    window.deleteCategory = deleteCategory;
+    window.addItem = addItem;
+    window.addCategory = addCategory;
+    window.resetToOriginal = resetToOriginal;
+    
+    window.updateItemField = function(cat, idx, field, value) {
+        if (currentData[cat] && currentData[cat][idx]) {
+            currentData[cat][idx][field] = value;
+            // Не сохраняем автоматически
         }
-    }
+    };
+    
+    window.updateCategoryNameFromInput = function(oldKey, newKey) {
+        // Отложенное обновление, чтобы не мешать вводу
+        setTimeout(() => {
+            if (oldKey !== newKey && newKey.trim() !== '') {
+                updateCategoryName(oldKey, newKey.trim());
+            }
+        }, 300);
+    };
 
-    function delHandler(e) {
-        const btn = e.currentTarget;
-        const catTitle = btn.getAttribute('data-cat');
-        const idx = parseInt(btn.getAttribute('data-idx'), 10);
-        if (!isNaN(idx) && currentData[catTitle]) {
-            deleteItem(catTitle, idx);
-        }
-    }
-
-    document.getElementById('resetLocalBtn')?.addEventListener('click', resetToOriginal);
+    // ---------- ИНИЦИАЛИЗАЦИЯ ----------
+    currentData = await loadFromGitHub();
     renderCategories();
+
+    // ---------- ОБРАБОТЧИКИ КНОПОК ----------
+    document.getElementById('toggleEditBtn').addEventListener('click', () => {
+        editMode = !editMode;
+        document.getElementById('toggleEditBtn').textContent = editMode ? '🔒 Выключить редактирование' : '✏️ Режим редактирования';
+        renderCategories();
+        showToast(editMode ? '✏️ Режим редактирования включён' : '🔒 Режим редактирования выключен', '');
+    });
+
+    document.getElementById('saveToGitBtn').addEventListener('click', async () => {
+        if (isSaving) return;
+        showToast('⏳ Сохранение в GitHub...', '');
+        await saveToGitHub(currentData);
+    });
+
+    document.getElementById('resetLocalBtn').addEventListener('click', resetToOriginal);
+    document.getElementById('addCategoryBtn').addEventListener('click', addCategory);
+
+    // Загрузка при открытии с обновлением из GitHub (по кнопке или автоматически)
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            loadFromGitHub().then(data => {
+                currentData = data;
+                renderCategories();
+            });
+        }
+    });
 </script>
 </body>
 </html>
